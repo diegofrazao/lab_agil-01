@@ -7,19 +7,23 @@ class AnalisadorLinha
 
   def frequency_analysis 
     count = 0
+    @words = []
     words_split = @line.split
     hash_words = words_split.group_by(&:itself).transform_values(&:count)
-    
+
     hash_words.each do |word, frequency|
       if frequency > count
-        @words = word
-        @frequency, count = frequency
+        count = frequency
+        @frequency = frequency
       end
     end
+    
+    hash_words.each {|word, frequency| @words << word if frequency == count }
+
   end
 
   def to_str
-    return "Palavra com mais frequencia: '#{@words}' -> #{@frequency}" + "\n" + "Linha: #{@number_line} -> #{@line}"
+    return "Palavra com mais frequencia: '#{@words}'" + "\n" + "Frequencia da palavra: #{@frequency}" + "\n" + "Linha: #{@number_line} -> #{@line}"
   end
 end
 
@@ -29,6 +33,6 @@ File.open("foo").each { |line| analisador_linhas << AnalisadorLinha.new($., line
 analisador_linhas.each_with_index do |a, idx|
   a.frequency_analysis
   puts
-  puts "Instancia #{idx+1}"
+  puts "Instancia 0#{idx+1}"
   puts a.to_str
 end
